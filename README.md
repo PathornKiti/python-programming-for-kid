@@ -14,6 +14,9 @@ hiding it behind a blinking cursor.
   aren't confident typists yet can still play and learn.
 * Py draws with **turtle graphics** that appear right inside the notebook —
   no extra windows, no setup beyond the first install.
+* Later lessons hand the kid a real **clickable canvas** — freeform pixel
+  art, a bubble-popping game — so it's not turtles-and-loops the whole way
+  through.
 * Finishing a lesson unlocks a badge 🏅 — a small, immediate reward for kids
   who like to see progress.
 
@@ -44,6 +47,13 @@ This repo is built around a few deliberate choices:
   and breaks in many notebook setups. `ColabTurtlePlus` draws inline as part
   of the notebook output, so the picture always appears right under the code
   that made it.
+* **`ipycanvas` for freeform/click-based lessons.** Turtle graphics are
+  relative-movement (forward/turn) and great for shapes, but not for
+  freeform drawing or arcade-style clicking games. `ipycanvas` gives a
+  pixel canvas with a built-in `on_mouse_down(x, y)` callback, so lessons
+  like Pixel Art Studio and Bubble Pop can react to exactly where a kid
+  clicked — no separate window, same inline-in-the-notebook feel as
+  `ColabTurtlePlus`.
 * **[`helpers/kid_tools.py`](helpers/kid_tools.py)** centralizes the "fun"
   parts — celebration cards, click-to-answer quizzes, badges — so every
   lesson gets the same warm, consistent feedback without copy-pasting HTML
