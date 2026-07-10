@@ -1,4 +1,4 @@
 notebook>=7.0
 jupyterlab>=4.0
 ipywidgets>=8.0
-ColabTurtlePlus>=3.0
+ColabTurtlePlus>=2.0
