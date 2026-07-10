@@ -13,9 +13,11 @@ Work through these in order — each one builds on the last.
 | 06 | [Catch the Star](06_catch_the_star/06_catch_the_star.ipynb) | click-controlled mini game: distance, state, event handlers | ⭐ Game Maker | ✅ |
 | 07 | [Pixel Art Studio](07_pixel_art_studio/07_pixel_art_studio.ipynb) | click-to-paint canvas, coordinates, color | 🎨 Pixel Artist | ✅ |
 | 08 | [Bubble Pop!](08_bubble_pop/08_bubble_pop.ipynb) | mouse click games, distance checks, respawning state | 🫧 Bubble Popper | ✅ |
-| 09 | Functions as Spells | `def`, reusing code | 🪄 Spellcaster | 🚧 planned |
-| 10 | Lists & the Treasure Chest | lists, indexing, `for` over a list | 📦 Collector | 🚧 planned |
-| 11 | Final Project: Draw Your Own World | free-form turtle + canvas art using everything so far | 🖼️ Python Artist | 🚧 planned |
+| 09 | [Fruit Catcher](09_fruit_catcher/09_fruit_catcher.ipynb) | animation loop, motion, catch/miss scoring | 🍎 Animator | ✅ |
+| 10 | [Memory Match](10_memory_match/10_memory_match.ipynb) | lists, `random.shuffle`, indexing, comparing values | 🧠 Memory Master | ✅ |
+| 11 | Functions as Spells | `def`, reusing code | 🪄 Spellcaster | 🚧 planned |
+| 12 | Lists & the Treasure Chest | lists, indexing, `for` over a list | 📦 Collector | 🚧 planned |
+| 13 | Final Project: Draw Your Own World | free-form turtle + canvas art using everything so far | 🖼️ Python Artist | 🚧 planned |
 
 ## Design pattern for new lessons
 
