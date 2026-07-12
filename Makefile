@@ -1,9 +1,20 @@
 VENV := .venv
 PYTHON := python3
 
-.PHONY: setup activate notebook lab clean
+.PHONY: setup check-python activate notebook lab clean
 
-setup:
+# `make` itself can't be installed by make, and neither can Python — so the
+# very first cold-start step lives in ./setup.sh (macOS/Linux) or setup.bat
+# (Windows). This just checks Python is present and points there if not.
+check-python:
+	@command -v $(PYTHON) >/dev/null 2>&1 || { \
+		echo "❌ Python not found."; \
+		echo "   Run ./setup.sh  (macOS/Linux)  or  setup.bat  (Windows) first —"; \
+		echo "   it installs Python for you, then finishes this setup."; \
+		exit 1; \
+	}
+
+setup: check-python
 	$(PYTHON) -m venv $(VENV)
 	$(VENV)/bin/pip install --upgrade pip
 	$(VENV)/bin/pip install -r requirements.txt
