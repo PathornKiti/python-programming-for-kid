@@ -22,11 +22,19 @@ hiding it behind a blinking cursor.
 
 ## Getting started
 
-A grown-up should do the one-time setup — see [`SETUP.md`](SETUP.md).
+A grown-up does the one-time setup. The quickest way, from inside this
+folder:
 
-Once it's installed, kids can just:
+* **macOS / Linux:** `./setup.sh`
+* **Windows:** double-click `setup.bat`
 
-1. Open **Jupyter**.
+That checks for Python (installing it if needed), sets everything up, and
+offers to open the lessons. Full details and a manual path are in
+[`SETUP.md`](SETUP.md).
+
+After that, kids can just:
+
+1. Run `make notebook` (or open **Jupyter**).
 2. Open `lessons/00_welcome/00_welcome.ipynb`.
 3. Click "Run" and follow Py!
 

@@ -3,7 +3,37 @@
 This is a one-time, ~10 minute setup. After this, your kid can just open
 Jupyter and start clicking.
 
-## 1. Install Python
+## Easiest way: one command
+
+If you don't want to think about any of the steps below, just run the
+bootstrap script from inside this folder. It checks for Python, installs
+it if it's missing, sets everything up, and offers to open the lessons.
+
+* **macOS / Linux** — in Terminal:
+
+  ```bash
+  ./setup.sh
+  ```
+
+* **Windows** — double-click **`setup.bat`**, or run it from Command Prompt:
+
+  ```bat
+  setup.bat
+  ```
+
+That's the whole setup. Everything below is the same thing done by hand,
+in case you'd rather do it step by step or something goes wrong.
+
+> **A note on `make`:** on macOS the script also makes sure `make` is
+> available (it comes with Apple's Command Line Tools), so afterwards you
+> can start the lessons with `make notebook`. Windows doesn't use `make` —
+> `setup.bat` does everything itself and tells you the command to launch.
+
+---
+
+## Doing it by hand
+
+### 1. Install Python
 
 Download Python 3.10+ from [python.org/downloads](https://www.python.org/downloads/)
 and install it. On the first screen of the Windows installer, check
@@ -16,27 +46,28 @@ Prompt) and running:
 python3 --version
 ```
 
-## 2. Install the project's dependencies
+### 2. Install the project's dependencies
 
 From inside this repo folder, run:
 
 ```bash
-pip install -r requirements.txt
+make setup
 ```
 
-This installs Jupyter, the interactive widgets, and the inline turtle
-graphics library used by the lessons.
+This builds an isolated `.venv` and installs Jupyter, the interactive
+widgets, and the inline turtle/canvas graphics libraries used by the
+lessons. (No `make`? Use `pip install -r requirements.txt` instead.)
 
-## 3. Launch Jupyter
+### 3. Launch Jupyter
 
 ```bash
-jupyter notebook
+make notebook
 ```
 
 This opens a browser tab file-browser. Navigate into `lessons/00_welcome/`
 and open `00_welcome.ipynb`.
 
-## 4. Show your kid how to run a cell
+### 4. Show your kid how to run a cell
 
 * Click on a gray code cell.
 * Press **Shift + Enter** (or click the ▶ Run button) to run it and move to
