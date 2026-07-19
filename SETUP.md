@@ -50,13 +50,13 @@ inline turtle graphics, and canvas tools from `requirements.txt`.
 * **Windows without Make:**
 
   ```bat
-  .venv\Scripts\jupyter notebook lessons\00_welcome\00_welcome.ipynb
+  .venv\Scripts\jupyter notebook lessons
   ```
 
 * **macOS manual start:**
 
   ```bash
-  .venv/bin/jupyter notebook lessons/00_welcome/00_welcome.ipynb
+  .venv/bin/jupyter notebook lessons
   ```
 
 ## Manual setup, step by step
@@ -67,7 +67,7 @@ inline turtle graphics, and canvas tools from `requirements.txt`.
 python3 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip
 .venv/bin/pip install -r requirements.txt
-.venv/bin/jupyter notebook lessons/00_welcome/00_welcome.ipynb
+.venv/bin/jupyter notebook lessons
 ```
 
 ### Windows Command Prompt
@@ -76,11 +76,12 @@ python3 -m venv .venv
 py -3 -m venv .venv
 .venv\Scripts\python -m pip install --upgrade pip
 .venv\Scripts\pip install -r requirements.txt
-.venv\Scripts\jupyter notebook lessons\00_welcome\00_welcome.ipynb
+.venv\Scripts\jupyter notebook lessons
 ```
 
 ## Show your kid how to run a cell
 
+* In Jupyter, open the `00_welcome` folder, then open `00_welcome.ipynb`.
 * Click on a gray code cell.
 * Press **Shift + Enter** or click the ▶ Run button.
 * Run cells from top to bottom.

@@ -28,7 +28,7 @@ else
   echo "    python3 -m venv .venv"
   echo "    .venv/bin/python -m pip install --upgrade pip"
   echo "    .venv/bin/pip install -r requirements.txt"
-  echo "    .venv/bin/jupyter notebook lessons/00_welcome/00_welcome.ipynb"
+  echo "    .venv/bin/jupyter notebook lessons"
   exit 1
 fi
 

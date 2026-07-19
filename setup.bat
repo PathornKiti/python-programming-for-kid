@@ -30,16 +30,16 @@ py -3 -m venv .venv
 echo.
 echo === All done! ===
 echo Student start command:
-echo     .venv\Scripts\jupyter notebook lessons\00_welcome\00_welcome.ipynb
+echo     .venv\Scripts\jupyter notebook lessons
 echo If your computer has make, you can also run:
 echo     make start
 echo.
 
-set /p reply="Open the welcome lesson now? [Y/n] "
+set /p reply="Open the lessons folder now? [Y/n] "
 if /I "%reply%"=="n" (
     echo Okay! Use the start command above whenever you're ready.
 ) else (
-    .venv\Scripts\jupyter notebook lessons\00_welcome\00_welcome.ipynb
+    .venv\Scripts\jupyter notebook lessons
 )
 
 endlocal

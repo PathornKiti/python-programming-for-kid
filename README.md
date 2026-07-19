@@ -54,10 +54,12 @@ Use the easiest command for your computer:
 | --- | --- |
 | macOS | `make start` |
 | Windows with Make | `make start` |
-| Windows without Make | `.venv\Scripts\jupyter notebook lessons\00_welcome\00_welcome.ipynb` |
+| Windows without Make | `.venv\Scripts\jupyter notebook lessons` |
 
-Jupyter opens in the browser at the welcome lesson. Click a code cell, press
-**Shift + Enter**, and follow Py.
+Jupyter opens in the browser at the `lessons/` folder. Open `00_welcome`,
+then click `00_welcome.ipynb`. After that, click a code cell, press
+**Shift + Enter**, and follow Py. The same browser page lets the student
+choose the next lesson folder later.
 
 ### Manual setup, no bash required
 
@@ -69,7 +71,7 @@ If the helper scripts feel confusing, do these steps by hand.
 python3 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip
 .venv/bin/pip install -r requirements.txt
-.venv/bin/jupyter notebook lessons/00_welcome/00_welcome.ipynb
+.venv/bin/jupyter notebook lessons
 ```
 
 **Windows Command Prompt:**
@@ -78,14 +80,14 @@ python3 -m venv .venv
 py -3 -m venv .venv
 .venv\Scripts\python -m pip install --upgrade pip
 .venv\Scripts\pip install -r requirements.txt
-.venv\Scripts\jupyter notebook lessons\00_welcome\00_welcome.ipynb
+.venv\Scripts\jupyter notebook lessons
 ```
 
 ## Helpful Make commands
 
 * `make help` — show the friendly command menu.
 * `make setup` — one-time grown-up setup for macOS or Windows with Make.
-* `make start` — open the welcome lesson for the student.
+* `make start` — open the `lessons/` folder so the student can choose a lesson.
 * `make journey` — print the learning path.
 * `make clean` — remove the local `.venv` toolbox and notebook caches.
 

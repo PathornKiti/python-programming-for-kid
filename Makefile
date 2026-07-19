@@ -56,14 +56,14 @@ setup: check-python
 	@echo ""
 	@echo "✅ Setup done!"
 	@echo "   Kid start command: make start"
-	@echo "   First notebook: lessons/00_welcome/00_welcome.ipynb"
+	@echo "   Jupyter opens the lessons folder so the student can choose any lesson"
 
 start: notebook
 
 lesson: notebook
 
 notebook:
-	$(VENV_JUPYTER) notebook lessons/00_welcome/00_welcome.ipynb
+	$(VENV_JUPYTER) notebook lessons
 
 lab:
 	$(VENV_JUPYTER) lab lessons
@@ -72,9 +72,9 @@ journey:
 	@echo "🐢 Student journey"
 	@echo "  1. A grown-up runs: make setup"
 	@echo "  2. The student runs: make start"
-	@echo "  3. Jupyter opens the welcome lesson"
+	@echo "  3. Jupyter opens the lessons folder"
 	@echo "  4. Click a cell, press Shift + Enter, and follow Py!"
-	@echo "  5. Next lessons live in the lessons/ folder."
+	@echo "  5. Start with 00_welcome, then choose the next lesson folder."
 
 activate:
 	@echo "Run this in your terminal if a grown-up wants the toolbox shell:"
