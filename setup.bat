@@ -1,64 +1,45 @@
 @echo off
-REM One-time setup for Py's Python Adventure (Windows).
-REM
-REM A grown-up double-clicks this ONCE on a new computer. It:
-REM   1. Checks whether Python is installed (and helps install it if not).
-REM   2. Builds the .venv virtual environment and installs the lesson tools.
-REM   3. Offers to open the lessons right away.
-REM
-REM Note: Windows does not come with `make`, and kids don't need it here --
-REM this script does everything `make setup` would do, without make.
+REM Optional grown-up helper for Windows.
+REM It never installs Python or system tools. It only checks what is present,
+REM then builds the lesson toolbox.
 
 setlocal
 echo.
-echo === Py's Python Adventure - setup ===
+echo === Py's Python Adventure - setup checker ===
 echo.
 
-REM ------------------------------------------------------------ 1. Python
-where python >nul 2>&1
+py -3 --version >nul 2>nul
 if %ERRORLEVEL%==0 (
-    echo [OK] Python is already installed
-    python --version
-    goto :venv
-)
-
-echo [!] Python is not installed on this computer.
-where winget >nul 2>&1
-if %ERRORLEVEL%==0 (
-    echo Installing Python with winget...
-    winget install -e --id Python.Python.3.12
-    echo.
-    echo Python was installed. Please CLOSE this window, open a new one,
-    echo and run setup.bat again to finish.
-    pause
-    exit /b 1
+    echo [OK] Python is ready
+    py -3 --version
 ) else (
-    echo Please install Python from https://www.python.org/downloads/
-    echo During install, TICK the box "Add Python to PATH".
-    echo Then run setup.bat again.
+    echo [!] Python 3 was not found.
+    echo Please install Python 3.10+ from https://www.python.org/downloads/
+    echo IMPORTANT: tick "Add python.exe to PATH" during install.
+    echo Then open a new Command Prompt in this folder and run: setup.bat
     pause
     exit /b 1
 )
 
-REM -------------------------------------------------- 2. venv + lesson tools
-:venv
 echo.
-echo Building the virtual environment (.venv) and installing lesson tools...
-python -m venv .venv
+echo Building the lesson toolbox in .venv...
+py -3 -m venv .venv
 .venv\Scripts\python -m pip install --upgrade pip
 .venv\Scripts\pip install -r requirements.txt
 
 echo.
 echo === All done! ===
-echo To start the lessons, run this from the same folder:
-echo     .venv\Scripts\jupyter notebook
+echo Student start command:
+echo     .venv\Scripts\jupyter notebook lessons
+echo If your computer has make, you can also run:
+echo     make start
 echo.
 
-set /p reply="Open the lessons now? [Y/n] "
+set /p reply="Open the lessons folder now? [Y/n] "
 if /I "%reply%"=="n" (
-    echo Okay! Run the command above whenever you're ready.
+    echo Okay! Use the start command above whenever you're ready.
 ) else (
-    .venv\Scripts\jupyter notebook
+    .venv\Scripts\jupyter notebook lessons
 )
 
 endlocal

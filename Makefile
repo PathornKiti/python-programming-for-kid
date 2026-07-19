@@ -1,42 +1,91 @@
 VENV := .venv
-PYTHON := python3
+PYTHON ?= python3
+PYTHON_WINDOWS ?= py -3
 
-.PHONY: setup check-python activate notebook lab clean
+ifeq ($(OS),Windows_NT)
+	VENV_PYTHON := $(VENV)\Scripts\python.exe
+	VENV_PIP := $(VENV)\Scripts\pip.exe
+	VENV_JUPYTER := $(VENV)\Scripts\jupyter.exe
+	RM_VENV := if exist $(VENV) rmdir /s /q $(VENV)
+	PYTHON_CHECK := $(PYTHON_WINDOWS) --version >NUL 2>NUL
+	CREATE_VENV := $(PYTHON_WINDOWS) -m venv $(VENV)
+	ACTIVATE_HINT := $(VENV)\Scripts\activate
+else
+	VENV_PYTHON := $(VENV)/bin/python
+	VENV_PIP := $(VENV)/bin/pip
+	VENV_JUPYTER := $(VENV)/bin/jupyter
+	RM_VENV := rm -rf $(VENV)
+	PYTHON_CHECK := command -v $(PYTHON) >/dev/null 2>&1
+	CREATE_VENV := $(PYTHON) -m venv $(VENV)
+	ACTIVATE_HINT := source $(VENV)/bin/activate
+endif
 
-# `make` itself can't be installed by make, and neither can Python — so the
-# very first cold-start step lives in ./setup.sh (macOS/Linux) or setup.bat
-# (Windows). This just checks Python is present and points there if not.
+.PHONY: help setup check-python notebook lab start activate lesson clean journey
+
+help:
+	@echo "🐢 Py's Python Adventure"
+	@echo ""
+	@echo "Grown-up first step:"
+	@echo "  make setup      Build the safe lesson toolbox in .venv"
+	@echo ""
+	@echo "Kid-friendly buttons:"
+	@echo "  make start      Open the lessons in Jupyter Notebook"
+	@echo "  make lesson     Same as make start"
+	@echo "  make journey    Show the happy learning path"
+	@echo ""
+	@echo "Other helpers:"
+	@echo "  make lab        Open JupyterLab"
+	@echo "  make clean      Remove the local .venv toolbox"
+
 check-python:
-	@command -v $(PYTHON) >/dev/null 2>&1 || { \
-		echo "❌ Python not found."; \
-		echo "   Run ./setup.sh  (macOS/Linux)  or  setup.bat  (Windows) first —"; \
-		echo "   it installs Python for you, then finishes this setup."; \
+ifeq ($(OS),Windows_NT)
+	@$(PYTHON_CHECK) || (echo ❌ Python was not found. & echo Please install Python 3.10+ from https://www.python.org/downloads/ & echo IMPORTANT: tick "Add python.exe to PATH" during install. & echo Then open a new terminal and run: make setup & exit /b 1)
+else
+	@$(PYTHON_CHECK) || { \
+		echo "❌ Python 3 was not found."; \
+		echo "Please install Python 3.10+ from https://www.python.org/downloads/"; \
+		echo "Then open a new terminal and run: make setup"; \
 		exit 1; \
 	}
+endif
 
 setup: check-python
-	$(PYTHON) -m venv $(VENV)
-	$(VENV)/bin/pip install --upgrade pip
-	$(VENV)/bin/pip install -r requirements.txt
+	$(CREATE_VENV)
+	$(VENV_PYTHON) -m pip install --upgrade pip
+	$(VENV_PIP) install -r requirements.txt
 	@echo ""
 	@echo "✅ Setup done!"
-	@echo "   Start the lessons with:   make notebook"
-	@echo "   Or activate the venv with: source $(VENV)/bin/activate"
+	@echo "   Kid start command: make start"
+	@echo "   Jupyter opens the lessons folder so the student can choose any lesson"
 
-# `make` runs each recipe in its own subshell, so it cannot activate the venv
-# in your shell for you. This just prints the exact command to copy.
-activate:
-	@echo "Run this in your terminal (make can't do it for you):"
-	@echo "    source $(VENV)/bin/activate"
+start: notebook
 
-# Launch Jupyter straight from the venv -- no manual activation needed.
+lesson: notebook
+
 notebook:
-	$(VENV)/bin/jupyter notebook
+	$(VENV_JUPYTER) notebook lessons
 
 lab:
-	$(VENV)/bin/jupyter lab
+	$(VENV_JUPYTER) lab lessons
+
+journey:
+	@echo "🐢 Student journey"
+	@echo "  1. A grown-up runs: make setup"
+	@echo "  2. The student runs: make start"
+	@echo "  3. Jupyter opens the lessons folder"
+	@echo "  4. Click a cell, press Shift + Enter, and follow Py!"
+	@echo "  5. Start with 00_welcome, then choose the next lesson folder."
+
+activate:
+	@echo "Run this in your terminal if a grown-up wants the toolbox shell:"
+	@echo "    $(ACTIVATE_HINT)"
 
 clean:
-	rm -rf $(VENV)
+	$(RM_VENV)
+ifeq ($(OS),Windows_NT)
+	@for /d /r %%d in (__pycache__) do @if exist "%%d" rmdir /s /q "%%d"
+	@for /d /r %%d in (.ipynb_checkpoints) do @if exist "%%d" rmdir /s /q "%%d"
+else
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type d -name ".ipynb_checkpoints" -exec rm -rf {} +
+endif

@@ -13,30 +13,85 @@ hiding it behind a blinking cursor.
 * A lot of feedback is **click-to-answer** (buttons, not typing), so kids who
   aren't confident typists yet can still play and learn.
 * Py draws with **turtle graphics** that appear right inside the notebook —
-  no extra windows, no setup beyond the first install.
+  no extra windows after the one-time setup.
 * Later lessons hand the kid a real **clickable canvas** — freeform pixel
   art, a bubble-popping game — so it's not turtles-and-loops the whole way
   through.
 * Finishing a lesson unlocks a badge 🏅 — a small, immediate reward for kids
   who like to see progress.
 
-## Getting started
+## Best student journey
 
-A grown-up does the one-time setup. The quickest way, from inside this
-folder:
+A grown-up should do the setup once. After that, the student only needs one
+simple start command.
 
-* **macOS / Linux:** `./setup.sh`
-* **Windows:** double-click `setup.bat`
+### 1. Grown-up: install Python manually
 
-That checks for Python (installing it if needed), sets everything up, and
-offers to open the lessons. Full details and a manual path are in
-[`SETUP.md`](SETUP.md).
+This project does **not** install Python for you. That keeps the setup safer
+and avoids surprising system changes.
 
-After that, kids can just:
+1. Download Python 3.10+ from <https://www.python.org/downloads/>.
+2. Install it.
+3. On Windows, tick **Add python.exe to PATH** on the first installer screen.
+4. Close and reopen your terminal after installing Python.
 
-1. Run `make notebook` (or open **Jupyter**).
-2. Open `lessons/00_welcome/00_welcome.ipynb`.
-3. Click "Run" and follow Py!
+### 2. Grown-up: run the setup command
+
+Open a terminal in this project folder and run the command for your computer:
+
+| Computer | Setup command | What it does |
+| --- | --- | --- |
+| macOS | `make setup` | Creates `.venv` and installs the lesson tools. |
+| Windows with Make | `make setup` | Creates `.venv` and installs the lesson tools. |
+| Windows without Make | `setup.bat` | Does the same setup without needing Make. |
+| macOS without Make | `./setup.sh` | Checks Python/Make and prints a manual fallback if Make is missing. |
+
+### 3. Student: start the adventure
+
+Use the easiest command for your computer:
+
+| Computer | Start command |
+| --- | --- |
+| macOS | `make start` |
+| Windows with Make | `make start` |
+| Windows without Make | `.venv\Scripts\jupyter notebook lessons` |
+
+Jupyter opens in the browser at the `lessons/` folder. Open `00_welcome`,
+then click `00_welcome.ipynb`. After that, click a code cell, press
+**Shift + Enter**, and follow Py. The same browser page lets the student
+choose the next lesson folder later.
+
+### Manual setup, no bash required
+
+If the helper scripts feel confusing, do these steps by hand.
+
+**macOS Terminal:**
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/pip install -r requirements.txt
+.venv/bin/jupyter notebook lessons
+```
+
+**Windows Command Prompt:**
+
+```bat
+py -3 -m venv .venv
+.venv\Scripts\python -m pip install --upgrade pip
+.venv\Scripts\pip install -r requirements.txt
+.venv\Scripts\jupyter notebook lessons
+```
+
+## Helpful Make commands
+
+* `make help` — show the friendly command menu.
+* `make setup` — one-time grown-up setup for macOS or Windows with Make.
+* `make start` — open the `lessons/` folder so the student can choose a lesson.
+* `make journey` — print the learning path.
+* `make clean` — remove the local `.venv` toolbox and notebook caches.
+
+More setup notes and troubleshooting are in [`SETUP.md`](SETUP.md).
 
 ## Lesson map
 
