@@ -15,9 +15,10 @@ Work through these in order — each one builds on the last.
 | 08 | [Bubble Pop!](08_bubble_pop/08_bubble_pop.ipynb) | mouse click games, distance checks, respawning state | 🫧 Bubble Popper | ✅ |
 | 09 | [Fruit Catcher](09_fruit_catcher/09_fruit_catcher.ipynb) | animation loop, motion, catch/miss scoring | 🍎 Animator | ✅ |
 | 10 | [Memory Match](10_memory_match/10_memory_match.ipynb) | lists, `random.shuffle`, indexing, comparing values | 🧠 Memory Master | ✅ |
-| 11 | Functions as Spells | `def`, reusing code | 🪄 Spellcaster | 🚧 planned |
-| 12 | Lists & the Treasure Chest | lists, indexing, `for` over a list | 📦 Collector | 🚧 planned |
-| 13 | Final Project: Draw Your Own World | free-form turtle + canvas art using everything so far | 🖼️ Python Artist | 🚧 planned |
+| 11 | [Maze Runner](11_maze_runner/README.md) | drag-and-drop blocks, "repeat" instead of many single steps, `if` / `else` to sense traps and monsters before stepping | 🧩 Maze Solver | ✅ |
+| 12 | Functions as Spells | `def`, reusing code | 🪄 Spellcaster | 🚧 planned |
+| 13 | Lists & the Treasure Chest | lists, indexing, `for` over a list | 📦 Collector | 🚧 planned |
+| 14 | Final Project: Draw Your Own World | free-form turtle + canvas art using everything so far | 🖼️ Python Artist | 🚧 planned |
 
 ## Design pattern for new lessons
 
@@ -32,3 +33,6 @@ Every notebook follows the same shape:
 
 See [`helpers/kid_tools.py`](../helpers/kid_tools.py) for the available
 building blocks (`celebrate`, `try_again`, `check_answer`, `quiz`, `badge`).
+
+**Exception:** Lesson 11 is a standalone **pygame** script, not a
+notebook — see its [README](11_maze_runner/README.md) for how to run it.

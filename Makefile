@@ -20,7 +20,7 @@ else
 	ACTIVATE_HINT := source $(VENV)/bin/activate
 endif
 
-.PHONY: help setup check-python notebook lab start activate lesson clean journey
+.PHONY: help setup check-python notebook lab start activate lesson clean journey maze
 
 help:
 	@echo "🐢 Py's Python Adventure"
@@ -31,6 +31,7 @@ help:
 	@echo "Kid-friendly buttons:"
 	@echo "  make start      Open the lessons in Jupyter Notebook"
 	@echo "  make lesson     Same as make start"
+	@echo "  make maze       Play Lesson 11: Maze Runner (pygame window)"
 	@echo "  make journey    Show the happy learning path"
 	@echo ""
 	@echo "Other helpers:"
@@ -67,6 +68,9 @@ notebook:
 
 lab:
 	$(VENV_JUPYTER) lab lessons
+
+maze:
+	$(VENV_PYTHON) lessons/11_maze_runner/maze_runner.py
 
 journey:
 	@echo "🐢 Student journey"
