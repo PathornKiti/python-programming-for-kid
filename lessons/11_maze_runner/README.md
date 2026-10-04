@@ -1,7 +1,7 @@
 # 🧩 Lesson 11: Maze Runner — Dungeon Crawler
 
 This lesson is different from the others: instead of a notebook, a
-little knight named Py crawls through **five dungeons** in its own
+little knight named Py crawls through **ten dungeons** in its own
 **pygame** window with a drag-and-drop block editor.
 
 ## How to run it
@@ -45,9 +45,9 @@ One window, three panels, all visible at once:
 Click **RUN** and watch Py play out your program right there on the
 map — the block currently running lights up with a white outline so
 you can follow along. Py starts each dungeon facing **East**, at the
-green dot. Get Py to the **gold star** and the *same* program keeps
-going straight into the next dungeon — you never rebuild it from
-scratch.
+green dot. Get Py to the **gold star** and the dungeon is cleared: your
+program is wiped clean and the next dungeon appears, ready for a fresh
+program.
 
 If Py bonks into a wall, steps on a **trap** 🔺, or runs into a
 **monster** 👾, the window doesn't close — you're dropped right back
@@ -87,8 +87,15 @@ is what gets Py through safely.
    corridor patrolled by 👾 monsters as well as traps. Combine
    everything: `forward()`/turn blocks for the parts you know, and the
    conditional block for the parts you don't.
+6. **Dungeon 6 (The Zigzag):** alternating left and right turns.
+7. **Dungeon 7 (The Counter-Spiral):** a spiral that only ever turns
+   *left*. Try the new `if blocked: left() else: forward()` blocks!
+8. **Dungeon 8 (The Trap Garden):** a wall of traps with one gap — find it.
+9. **Dungeon 9 (The Monster Maze):** monsters everywhere; weave between them.
+10. **Dungeon 10 (The Final Gauntlet):** twisty corridors, traps and
+    monsters together. Some routes are decoys!
 
-Clear all five dungeons to unlock the **🧩 Maze Solver** badge (printed
+Clear all ten dungeons to unlock the **🧩 Maze Solver** badge (printed
 in the terminal, and shown in the window).
 
 ## Stuck? Peek at working solutions

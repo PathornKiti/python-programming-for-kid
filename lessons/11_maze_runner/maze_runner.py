@@ -2,7 +2,7 @@
 Lesson 11: Maze Runner -- Dungeon Crawler
 ==========================================
 
-A little knight named Py just dropped into the first of five dungeons!
+A little knight named Py just dropped into the first of ten dungeons!
 Run this file:
 
     python maze_runner.py
@@ -23,6 +23,8 @@ One window, three panels, all visible together:
                                  instead of walking into it.
         repeat (if blocked...) x N
                                  the block above, repeated N times.
+        if blocked: left() else: forward()  (and its repeat version)
+                                 same idea, but turns left instead.
 
   * YOUR PROGRAM (right) -- the blocks you've dragged in, top to bottom.
     Drag a block out and drop it outside this column to remove it.
@@ -30,8 +32,8 @@ One window, three panels, all visible together:
 
 Click RUN to watch Py play out your program right there on the map (the
 block that's currently running lights up). If Py reaches the gold
-star, the SAME program keeps going straight into the next dungeon --
-you don't start over! Walking into a wall just bonks Py in place, but
+star, the dungeon is cleared: your program is wiped clean and the next
+dungeon appears so you can build a fresh one. Walking into a wall just bonks Py in place, but
 stepping on a trap or into a monster sends Py back to the start of
 THAT dungeon -- and your program keeps consuming commands from there.
 The window never closes on its own: it just drops you back into

@@ -162,6 +162,68 @@ DUNGEON_MAPS = [
             "#############",
         ],
     ),
+    (
+        "Dungeon 6: The Zigzag",
+        [
+            "###########",
+            "#S..#######",
+            "###.#######",
+            "###.....###",
+            "#######.###",
+            "#######..G#",
+            "###########",
+        ],
+    ),
+    (
+        "Dungeon 7: The Counter-Spiral",
+        [
+            "#########",
+            "#.......#",
+            "#.#####.#",
+            "#.#G..#.#",
+            "#.###.#.#",
+            "#.....#.#",
+            "#######.#",
+            "#S......#",
+            "#########",
+        ],
+    ),
+    (
+        "Dungeon 8: The Trap Garden",
+        [
+            "###########",
+            "#S....T...#",
+            "#.....T...#",
+            "#.....T...#",
+            "#.........#",
+            "#.....T..G#",
+            "###########",
+        ],
+    ),
+    (
+        "Dungeon 9: The Monster Maze",
+        [
+            "#############",
+            "#S...M...M..#",
+            "#.M...M...M.#",
+            "#...M...M..G#",
+            "#############",
+        ],
+    ),
+    (
+        "Dungeon 10: The Final Gauntlet",
+        [
+            "#############",
+            "#S..T...#...#",
+            "#.#.###.#.#.#",
+            "#.#...#...#.#",
+            "#.###.......#",
+            "#...M.....T.#",
+            "###.#######.#",
+            "###.....M..G#",
+            "#############",
+        ],
+    ),
 ]
 
 DUNGEONS = [parse_dungeon(name, rows) for name, rows in DUNGEON_MAPS]
@@ -312,13 +374,15 @@ class DungeonPlayer:
     can highlight it.
     """
 
-    def __init__(self, commands, cell_center_fn, owners=None, start_delay=0.6):
+    def __init__(self, commands, cell_center_fn, owners=None, start_delay=0.6, dungeon_i=0, auto_advance=True):
         self.commands = commands
         self.cell_center_fn = cell_center_fn
         self.owners = owners
-        self.dungeon_i = 0
+        self.dungeon_i = dungeon_i
+        self.auto_advance = auto_advance
+        self.cleared = False
         self.cmd_i = 0
-        self.dungeon = DUNGEONS[0]
+        self.dungeon = DUNGEONS[dungeon_i]
         self.col, self.row = self.dungeon["start"]
         self.facing = 0
         self.px, self.py = cell_center_fn(self.col, self.row, self.dungeon)
@@ -350,7 +414,7 @@ class DungeonPlayer:
                 self.py = fy + (ty - fy) * t
             return
 
-        if self.victory or self.finished or now < self.next_action_time:
+        if self.victory or self.cleared or self.finished or now < self.next_action_time:
             return
 
         here = (self.col, self.row)
@@ -366,6 +430,13 @@ class DungeonPlayer:
             return
 
         if (self.col, self.row) == self.dungeon["goal"]:
+            if not self.auto_advance:
+                self.cleared = True
+                self.victory = self.dungeon_i == len(DUNGEONS) - 1
+                self.message = f"{self.dungeon['name']} cleared!"
+                if self.victory:
+                    print("All dungeons cleared! Badge unlocked: Maze Solver")
+                return
             self.dungeon_i += 1
             if self.dungeon_i >= len(DUNGEONS):
                 self.victory = True
@@ -407,9 +478,9 @@ class DungeonPlayer:
             self.facing = (self.facing + 1) % 4
             self.message = ""
             self.next_action_time = now + TURN_SECONDS
-        elif cmd == "if_danger":
+        elif cmd in ("if_danger", "if_danger_left"):
             if is_hazard_ahead(self.dungeon, self.col, self.row, self.facing):
-                self.facing = (self.facing + 1) % 4
+                self.facing = (self.facing + (1 if cmd == "if_danger" else -1)) % 4
                 self.message = ""
                 self.next_action_time = now + TURN_SECONDS
             else:

@@ -70,7 +70,12 @@ COLOR_CLEAR = (200, 80, 80)
 COLOR_MESSAGE = (255, 224, 130)
 COLOR_HIGHLIGHT = (255, 255, 255)
 
-REPEAT_TYPES = {"repeat_forward", "repeat_if_danger"}
+REPEAT_COMMANDS = {
+    "repeat_forward": "forward",
+    "repeat_if_danger": "if_danger",
+    "repeat_if_danger_left": "if_danger_left",
+}
+REPEAT_TYPES = set(REPEAT_COMMANDS)
 
 PALETTE_TEMPLATES = [
     {"type": "forward", "label": "forward()", "color": COLOR_FORWARD},
@@ -79,6 +84,8 @@ PALETTE_TEMPLATES = [
     {"type": "repeat_forward", "label": "repeat forward x N", "color": COLOR_REPEAT},
     {"type": "if_danger", "label": "if blocked: right() else: fwd()", "color": COLOR_COND},
     {"type": "repeat_if_danger", "label": "repeat (if blocked...) x N", "color": COLOR_COND_REPEAT},
+    {"type": "if_danger_left", "label": "if blocked: left() else: fwd()", "color": COLOR_COND},
+    {"type": "repeat_if_danger_left", "label": "repeat (if blocked<-) x N", "color": COLOR_COND_REPEAT},
 ]
 
 
@@ -89,13 +96,9 @@ def _new_block(block_type):
 
 
 def _block_label(block):
-    if block["type"] == "repeat_forward":
-        return f"repeat forward x {block['n']}"
-    if block["type"] == "repeat_if_danger":
-        return f"repeat (if blocked...) x {block['n']}"
     for t in PALETTE_TEMPLATES:
         if t["type"] == block["type"]:
-            return t["label"]
+            return t["label"].replace("x N", f"x {block['n']}") if "n" in block else t["label"]
     return block["type"]
 
 
@@ -107,7 +110,7 @@ def _block_color(block):
 
 
 def compile_commands_with_owners(script):
-    """Flatten the block list into "forward"/"left"/"right"/"if_danger"
+    """Flatten the block list into "forward"/"left"/"right"/"if_danger"/"if_danger_left"
     strings. `owners[i]` is the index into `script` of the block that
     produced `commands[i]`, so the UI can highlight the block currently
     running.
@@ -115,11 +118,8 @@ def compile_commands_with_owners(script):
     commands = []
     owners = []
     for i, block in enumerate(script):
-        if block["type"] == "repeat_forward":
-            commands += ["forward"] * block["n"]
-            owners += [i] * block["n"]
-        elif block["type"] == "repeat_if_danger":
-            commands += ["if_danger"] * block["n"]
+        if block["type"] in REPEAT_COMMANDS:
+            commands += [REPEAT_COMMANDS[block["type"]]] * block["n"]
             owners += [i] * block["n"]
         else:
             commands.append(block["type"])
@@ -184,6 +184,9 @@ def run_block_editor():
     message = ""
     message_until = 0
     scroll = 0  # pixels scrolled down in the YOUR PROGRAM column
+    level = 0  # next dungeon to play; advances (and the program resets) on each win
+    idle_message = "Ready! Drag blocks and press RUN."
+    idle_victory = False
 
     run_button = pygame.Rect(SCRIPT_X, BOTTOM_Y, 140, 44)
     clear_button = pygame.Rect(SCRIPT_X + 160, BOTTOM_Y, 140, 44)
@@ -206,7 +209,9 @@ def run_block_editor():
                 if run_button.collidepoint(mx, my):
                     if script:
                         commands, owners = compile_commands_with_owners(script)
-                        player = de.DungeonPlayer(commands, _map_cell_center, owners=owners)
+                        player = de.DungeonPlayer(
+                            commands, _map_cell_center, owners=owners, dungeon_i=level, auto_advance=False
+                        )
                         mode = "playing"
                     else:
                         message = "Drag some blocks in first!"
@@ -215,6 +220,7 @@ def run_block_editor():
                 if clear_button.collidepoint(mx, my):
                     script.clear()
                     scroll = 0
+                    player = None
                     continue
 
                 # +/- steppers on repeat tiles in the script column
@@ -237,6 +243,9 @@ def run_block_editor():
                         break
                 if hit_stepper:
                     continue
+
+                # any edit puts Py back at the start of the current dungeon
+                player = None
 
                 # start dragging an existing script block
                 if _in_script_column(mx, my):
@@ -283,7 +292,20 @@ def run_block_editor():
 
         if mode == "playing":
             player.update(now)
-            if player.finished or player.victory:
+            if player.cleared:
+                # won: reset the program so the kid can build a fresh one
+                mode = "build"
+                script.clear()
+                scroll = 0
+                idle_victory = player.victory
+                if player.victory:
+                    level = 0
+                    idle_message = "All dungeons cleared! Badge: Maze Solver. Press RUN to replay."
+                else:
+                    level = player.dungeon_i + 1
+                    idle_message = f"Cleared! Next: {de.DUNGEONS[level]['name']}. Build a new program!"
+                player = None
+            elif player.finished:
                 mode = "build"
 
         # --- draw ---
@@ -292,22 +314,22 @@ def run_block_editor():
         # map panel (always visible)
         title = font.render("DUNGEON MAP", True, COLOR_HEADER)
         screen.blit(title, (MAP_X, 20))
-        dungeon = player.dungeon if player is not None else de.DUNGEONS[0]
+        dungeon = player.dungeon if player is not None else de.DUNGEONS[level]
         pygame.draw.rect(screen, COLOR_PANEL, pygame.Rect(MAP_X - 10, MAP_Y - 10, MAP_W + 20, MAP_H + STATUS_H + 30))
         de.draw_dungeon(screen, dungeon, (MAP_X, MAP_Y), CELL)
         if player is not None:
             de.draw_player(screen, player.px, player.py, player.facing, CELL)
-            dungeon_i, status_message, finished, victory = player.dungeon_i, player.message, player.finished, player.victory
+            dungeon_i, status_message, finished, victory = player.dungeon_i, player.message, player.finished, False
         else:
             start = dungeon["start"]
             sx, sy = _map_cell_center(*start, dungeon)
             de.draw_player(screen, sx, sy, 0, CELL)
-            dungeon_i, status_message, finished, victory = 0, "Ready! Drag blocks and press RUN.", False, False
+            dungeon_i, status_message, finished, victory = level, idle_message, False, idle_victory
 
         status_bar = pygame.Rect(MAP_X - 10, MAP_Y + MAP_H + 4, MAP_W + 20, STATUS_H)
         pygame.draw.rect(screen, (14, 13, 20), status_bar)
         if victory:
-            status_surf = small_font.render("All dungeons cleared! Badge: Maze Solver", True, de.COLOR_VICTORY)
+            status_surf = small_font.render(status_message, True, de.COLOR_VICTORY)
         else:
             name = f"Dungeon {min(dungeon_i + 1, len(de.DUNGEONS))} of {len(de.DUNGEONS)}"
             shown = status_message
